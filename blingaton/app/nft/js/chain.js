@@ -773,4 +773,6 @@ async function loadWeb3() {
       console.log(web3.utilsweb3.sha3(passphrase, { encoding: 'hex'}));
 
     // web3.utilsweb3.sha3(passhrase, { encoding: 'hex'});
+
+    let hashing = web
   }
