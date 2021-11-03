@@ -827,4 +827,20 @@ async function loadWeb3() {
 
 
   }
+
+  function adminSlugGenerator(number){
+
+
+    let slugArr = [];
+
+    for(let i=0; i < number;i++){
+
+    
+        slugArr.push( generateSlug());
+        
+        }
+
+        console.log(slugArr);
+
+  }
   
