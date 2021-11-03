@@ -1,7 +1,17 @@
 'use strict'
+
+let hashes = [];
+
+
 window.addEventListener('load', (event) => {
     console.log('The page has fully loaded ^ㅂ^')
-    generateSlug();
+  
+    let tempSlug = generateSlug();
+    
+  generateHashAndStore(tempSlug);
+  console.log(hashes);
+  equals(hashes, tempSlug);
+ 
     
 
 });
@@ -282,14 +292,34 @@ async function loadWeb3() {
     }
     let passphrase = strArray.join('-');
     console.log(passphrase);
+
+    return passphrase;
     
   }
 
-  function generateHash(){
-
-        return null;
-
+  function generateHash(userWord){
+    
+    let hash = Web3.utils.keccak256(userWord); // string input
+    console.log(hash);
+  
   } 
+
+  function generateHashAndStore(userWord){
+    
+    let hash = Web3.utils.keccak256(userWord); // string input
+    console.log(hash);
+    hashes.push(hash);
+
+    //console.log(hashes);
+  } 
+
+
+
+  function equals(arr, hash){
+   return arr.includes(hash);
+  }
+  
+
 
     
 
