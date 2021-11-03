@@ -309,6 +309,7 @@ async function loadWeb3() {
     let hash = Web3.utils.keccak256(userWord); // string input
     console.log(hash);
     hashes.push(hash);
+    
 
     //console.log(hashes);
   } 
@@ -318,6 +319,8 @@ async function loadWeb3() {
   function equals(arr, hash){
    return arr.includes(hash);
   }
+
+
   
 
 

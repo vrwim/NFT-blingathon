@@ -506,6 +506,7 @@ async function loadWeb3() {
 
   }
 
+
   function generateSlug(){
 
     const wordList = [
@@ -765,14 +766,31 @@ async function loadWeb3() {
     }
     let passphrase = strArray.join('-');
     console.log(passphrase);
-    console.log(generateHash(passphrase));
+
+    return passphrase;
     
   }
 
-  function generateHash(passphrase){
-      console.log(web3.utilsweb3.sha3(passphrase, { encoding: 'hex'}));
+  function generateHash(userWord){
+    
+    let hash = Web3.utils.keccak256(userWord); // string input
+    console.log(hash);
+  
+  } 
 
-    // web3.utilsweb3.sha3(passhrase, { encoding: 'hex'});
+  function generateHashAndStore(userWord){
+    
+    let hash = Web3.utils.keccak256(userWord); // string input
+    console.log(hash);
+    hashes.push(hash);
+    
 
-    let hashing = web
+    //console.log(hashes);
+  } 
+
+
+
+  function equals(arr, hash){
+   return arr.includes(hash);
   }
+  
