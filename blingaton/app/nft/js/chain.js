@@ -1,11 +1,15 @@
 let voltaContract
 let contractAddress = "0x40e8aA278b319090ce0fbf87eA22acC018d9a52a";
+let hashes = [];
 
 window.addEventListener('load', (event) => {
     console.log('The page has fully loaded ^ㅂ^')
     loadWeb3();
+    generateSlug();
+
     sendClaim();
-    generateSlug()
+
+  
 
 
 });
@@ -500,7 +504,11 @@ async function loadWeb3() {
     document.getElementById("claimForm").addEventListener('submit',function(e){
         e.preventDefault();
         let claim = document.getElementById("nft-claim").value;
+        hashes.push(web3.utils.keccak256(claim));
+
         console.log(claim);
+        checkClaim(claim);
+      //  checkClaim(claim);
         document.getElementById("nft-claim").value = "NOice ( ͡° ͜ʖ ͡°) ";
     });
 
@@ -511,6 +519,7 @@ async function loadWeb3() {
 
     const wordList = [
         // Borrowed from xkcd password generator which borrowed it from wherever
+        // length = 1952
         "ability","able","aboard","about","above","accept","accident","according",
         "account","accurate","acres","across","act","action","active","activity",
         "actual","actually","add","addition","additional","adjective","adult","adventure",
@@ -765,6 +774,7 @@ async function loadWeb3() {
     strArray.push(str);
     }
     let passphrase = strArray.join('-');
+
     console.log(passphrase);
 
     return passphrase;
@@ -774,6 +784,7 @@ async function loadWeb3() {
   function generateHash(userWord){
     
     let hash = Web3.utils.keccak256(userWord); // string input
+
     console.log(hash);
   
   } 
@@ -792,5 +803,28 @@ async function loadWeb3() {
 
   function equals(arr, hash){
    return arr.includes(hash);
+  }
+
+  function checkClaim(x){
+      
+    console.log( hashes.includes(web3.utils.keccak256(x)));
+  }
+
+  function doTest(){
+
+        let testSlug = generateSlug();
+
+        generateHashAndStore(testSlug);
+
+        console.log(hashes);
+
+        let hash = generateHash(testSlug);
+
+        console.log(equals(hashes,hash));
+
+
+        checkClaim(testSlug)
+
+
   }
   
