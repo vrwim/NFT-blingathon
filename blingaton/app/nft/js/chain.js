@@ -533,12 +533,15 @@ function sendClaim(){
         e.preventDefault();
         let claim = document.getElementById("nft-claim").value;
         console.log(claim);
-       // let paddedClaim = "[" + `"`+ claim + `"` +"] ";
-      //  console.log(paddedClaim);
+     
         voltaContract.methods
+        //ARRAY
         .addClaimableCodes([claim])
         .send({from: web3.eth.defaultAccount})
-        .then(succes => console.log(succes)) 
+        .then(succes => console.log(succes))
+            voltaContract.postedClaimableCode(function(error,result){
+                if(!error) console.log(result);
+            }) 
         .catch(e => console.log(e));
           
         //addClaimableCodesToChain(claim)
@@ -886,21 +889,4 @@ function sendClaim(){
   }
 
 
-  function addClaimableCodesToChain(claim){
 
-    let tstclm =  ["greater-drive-mix-model-line-growth-thy-oldest-enough-pink"];
-
-    voltaContract.methods.addClaimableCodes(claim)
-    .send({from: web3.eth.defaultAccount})
-    .then(console.log())
-    .catch(console.log());
-
-   voltaContract.events.postedClaimableCode({},(error,data) => {
-       if(error){
-           console.log(error);
-           return;
-       }
-   })
-
-  }
-  
