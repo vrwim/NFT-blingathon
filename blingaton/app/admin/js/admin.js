@@ -1,20 +1,513 @@
-'use strict'
-
+let voltaContract
+let contractAddress = "0x522B255efdD17E62AD64d371791cAb0a1dB67F79";
 let hashes = [];
-
 
 window.addEventListener('load', (event) => {
     console.log('The page has fully loaded ^ㅂ^')
+    loadWeb3();
+    //generateSlug();
+
+    //sendClaim();
+    generateQuantity();
+
   
-    let tempSlug = generateSlug();
-    
-  generateHashAndStore(tempSlug);
-  console.log(hashes);
-  equals(hashes, tempSlug);
- 
-    
+
 
 });
+
+
+
+
+//voltaContract = abi.at(contractAddress);
+
+
+            
+async function loadContract(){
+    let abi = [
+      {
+        "inputs": [],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "account",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "operator",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "bool",
+            "name": "approved",
+            "type": "bool"
+          }
+        ],
+        "name": "ApprovalForAll",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "previousOwner",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "newOwner",
+            "type": "address"
+          }
+        ],
+        "name": "OwnershipTransferred",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "operator",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256[]",
+            "name": "ids",
+            "type": "uint256[]"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256[]",
+            "name": "values",
+            "type": "uint256[]"
+          }
+        ],
+        "name": "TransferBatch",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "operator",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "value",
+            "type": "uint256"
+          }
+        ],
+        "name": "TransferSingle",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "string",
+            "name": "value",
+            "type": "string"
+          },
+          {
+            "indexed": true,
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          }
+        ],
+        "name": "URI",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "string[]",
+            "name": "codes",
+            "type": "string[]"
+          }
+        ],
+        "name": "postedClaimableCode",
+        "type": "event"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "bytes32[]",
+            "name": "hashes",
+            "type": "bytes32[]"
+          }
+        ],
+        "name": "addClaimableCodeHashes",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "string[]",
+            "name": "codes",
+            "type": "string[]"
+          }
+        ],
+        "name": "addClaimableCodes",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "account",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          }
+        ],
+        "name": "balanceOf",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address[]",
+            "name": "accounts",
+            "type": "address[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "ids",
+            "type": "uint256[]"
+          }
+        ],
+        "name": "balanceOfBatch",
+        "outputs": [
+          {
+            "internalType": "uint256[]",
+            "name": "",
+            "type": "uint256[]"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "account",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "operator",
+            "type": "address"
+          }
+        ],
+        "name": "isApprovedForAll",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "string",
+            "name": "code",
+            "type": "string"
+          }
+        ],
+        "name": "mint",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "nextId",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "renounceOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "ids",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "amounts",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "bytes",
+            "name": "data",
+            "type": "bytes"
+          }
+        ],
+        "name": "safeBatchTransferFrom",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes",
+            "name": "data",
+            "type": "bytes"
+          }
+        ],
+        "name": "safeTransferFrom",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "operator",
+            "type": "address"
+          },
+          {
+            "internalType": "bool",
+            "name": "approved",
+            "type": "bool"
+          }
+        ],
+        "name": "setApprovalForAll",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "bytes4",
+            "name": "interfaceId",
+            "type": "bytes4"
+          }
+        ],
+        "name": "supportsInterface",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "newOwner",
+            "type": "address"
+          }
+        ],
+        "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "name": "uri",
+        "outputs": [
+          {
+            "internalType": "string",
+            "name": "",
+            "type": "string"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "name": "voucherHashes",
+        "outputs": [
+          {
+            "internalType": "bytes32",
+            "name": "",
+            "type": "bytes32"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "bytes32",
+            "name": "",
+            "type": "bytes32"
+          }
+        ],
+        "name": "vouchers",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "exists",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "claimed",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      }
+    ];
+    
+  //  voltaContract = abi.at(contractAddress);
+voltaContract = new web3.eth.Contract(abi, "0x522B255efdD17E62AD64d371791cAb0a1dB67F79");
+console.log(voltaContract.methods);
+  
+}
 
 async function loadWeb3() {
     if (ethereum) {
@@ -28,15 +521,31 @@ async function loadWeb3() {
     let accounts = await web3.eth.getAccounts();
     web3.eth.defaultAccount = accounts[0];
     console.log(`Your account is ${web3.eth.defaultAccount}`);
-        document.getElementById("metamask-acc").innerHTML +=` ${web3.eth.defaultAccount}`;
+   // document.getElementById("metamask-acc").innerHTML +=` ${web3.eth.defaultAccount}`;
 
-    
+    loadContract();
   }
+  
+   function sendClaim(){
+      document.getElementById("claimForm").addEventListener('submit',function(e){
+        e.preventDefault();
+        let claim = document.getElementById("nft-claim").value;
+        hashes.push(web3.utils.keccak256(claim));
+
+        console.log(claim);
+        checkClaim(claim);
+      //  checkClaim(claim);
+        document.getElementById("nft-claim").value = "NOice ( ͡° ͜ʖ ͡°) ";
+    });
+
+  }
+
 
   function generateSlug(){
 
     const wordList = [
         // Borrowed from xkcd password generator which borrowed it from wherever
+        // length = 1952
         "ability","able","aboard","about","above","accept","accident","according",
         "account","accurate","acres","across","act","action","active","activity",
         "actual","actually","add","addition","additional","adjective","adult","adventure",
@@ -291,6 +800,7 @@ async function loadWeb3() {
     strArray.push(str);
     }
     let passphrase = strArray.join('-');
+
     console.log(passphrase);
 
     return passphrase;
@@ -300,7 +810,8 @@ async function loadWeb3() {
   function generateHash(userWord){
     
     let hash = Web3.utils.keccak256(userWord); // string input
-    console.log(hash);
+
+    return hash;
   
   } 
 
@@ -320,11 +831,109 @@ async function loadWeb3() {
    return arr.includes(hash);
   }
 
+  function checkClaim(x){
+      
+    console.log( hashes.includes(web3.utils.keccak256(x)));
+  }
+
+  function doTest(){
+
+        let testSlug = generateSlug();
+
+        generateHashAndStore(testSlug);
+
+        console.log(hashes);
+
+        let hash = generateHash(testSlug);
+
+        console.log(equals(hashes,hash));
+
+
+        checkClaim(testSlug)
+
+
+  } 
+
+  function adminSlugGenerator(number){
+
+
+    let slugArr = [];
+
+    for(let i=0; i < number;i++){
+
+    
+        slugArr.push( generateSlug());
+        
+        }
+
+        //console.log(slugArr);
+
+        return slugArr;
+
+  }
+
+
+  function pushToChain(){
+
+
+    voltaContract.methods.addClaimableCodeHashes("oxygen-but-post-solve-gather-nature-fire-driving-play-married")
+    voltaContract.methods.addClaimableCodeHashes("0x52161f51225f8afe257504eb04c6b7dfd6569ea1e470901430e286ff23779e76")
+
+
+    local-arm-army-cry-larger-produce-sport-discussion-rubber-building
+
+    0xb5aebba3b98b88d06b98743311722692d0516ff60d1fb84c6f161dbbd1039c57
+    0xb5aebba3b98b88d06b98743311722692d0516ff60d1fb84c6f161dbbd1039c57
+
+    ["0xb5aebba3b98b88d06b98743311722692d0516ff60d1fb84c6f161dbbd1039c57"]
+
+
+  }
+
+   function generateQuantity(){
+
+      document.getElementById("quantityForm").addEventListener('submit',function(e){
+      e.preventDefault();
+      let quantity =  document.getElementById("quantity").value;
+
+      console.log(quantity);
+
+      
+      //console.log(adminSlugGenerator(quantity));
+
+      let slugArr = [];
+      let slugPass = [];
+
+      for(let i = 0; i < quantity ; i++){
+
+        tempSlug = generateSlug();
+        slugArr.push(tempSlug);
+        slugPass.push(generateHash(tempSlug));
+      }
+
+      console.log(slugArr); 
+      console.log(slugPass);
+
+      output(slugPass);
 
   
 
+     // let entryCode = {slug: '', passphrase:''};
+     // document.getElementById("output").innerHTML += `<p>`+  slugArr[i] +  `</p> <br>`;
+        
+     
+    })
 
     
 
-  
+    
 
+
+  }
+
+  function output(array){
+    for(let i = 0; array.length;i++){
+      document.getElementById("output").innerHTML += `<p>`+  array[i]  +  `</p> <br>`;
+     }
+  }
+  

@@ -1,13 +1,13 @@
 let voltaContract
-let contractAddress = "0x40e8aA278b319090ce0fbf87eA22acC018d9a52a";
+let contractAddress = "0x522B255efdD17E62AD64d371791cAb0a1dB67F79";
 let hashes = [];
 
 window.addEventListener('load', (event) => {
     console.log('The page has fully loaded ^ㅂ^')
     loadWeb3();
-    generateSlug();
+    //generateSlug();
 
-    sendClaim();
+    //sendClaim();
 
   
 
@@ -166,6 +166,19 @@ async function loadContract(){
             "type": "event"
         },
         {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": false,
+                    "internalType": "string[]",
+                    "name": "codes",
+                    "type": "string[]"
+                }
+            ],
+            "name": "postedClaimableCode",
+            "type": "event"
+        },
+        {
             "inputs": [
                 {
                     "internalType": "bytes32[]",
@@ -174,6 +187,19 @@ async function loadContract(){
                 }
             ],
             "name": "addClaimableCodeHashes",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string[]",
+                    "name": "codes",
+                    "type": "string[]"
+                }
+            ],
+            "name": "addClaimableCodes",
             "outputs": [],
             "stateMutability": "nonpayable",
             "type": "function"
@@ -478,7 +504,7 @@ async function loadContract(){
     
     
   //  voltaContract = abi.at(contractAddress);
-voltaContract = new web3.eth.Contract(abi, "0x40e8aA278b319090ce0fbf87eA22acC018d9a52a");
+voltaContract = new web3.eth.Contract(abi, "0x522B255efdD17E62AD64d371791cAb0a1dB67F79");
 console.log(voltaContract.methods);
   
 }
@@ -495,19 +521,20 @@ async function loadWeb3() {
     let accounts = await web3.eth.getAccounts();
     web3.eth.defaultAccount = accounts[0];
     console.log(`Your account is ${web3.eth.defaultAccount}`);
-        document.getElementById("metamask-acc").innerHTML +=` ${web3.eth.defaultAccount}`;
+    document.getElementById("metamask-acc").innerHTML +=` ${web3.eth.defaultAccount}`;
 
     loadContract();
   }
   
-  function sendClaim(){
+   function sendClaim(){
     document.getElementById("claimForm").addEventListener('submit',function(e){
         e.preventDefault();
         let claim = document.getElementById("nft-claim").value;
         hashes.push(web3.utils.keccak256(claim));
 
         console.log(claim);
-        checkClaim(claim);
+        addClaimableCodesToChain(claim);
+       // checkClaim(claim);
       //  checkClaim(claim);
         document.getElementById("nft-claim").value = "NOice ( ͡° ͜ʖ ͡°) ";
     });
@@ -826,7 +853,7 @@ async function loadWeb3() {
         checkClaim(testSlug)
 
 
-  }
+  } 
 
   function adminSlugGenerator(number){
 
@@ -841,6 +868,19 @@ async function loadWeb3() {
         }
 
         console.log(slugArr);
+
+  }
+
+
+  function addClaimableCodesToChain(claim){
+
+    let tstclm =  ["greater-drive-mix-model-line-growth-thy-oldest-enough-pink"];
+
+    voltaContract.methods.addClaimableCodes(claim);
+
+    var event = clientReceiptContract.Deposit(function(error, result) {
+        if (!error)console.log(result);
+     });
 
   }
   

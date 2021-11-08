@@ -8,15 +8,26 @@ contract BLINGhack is ERC1155, Ownable {
         bool exists;
         bool claimed;
     }
+
+    //to do add event to listen for succesfully added hashes
+
     mapping(bytes32 => NFTVoucher) public vouchers;
     uint public nextId = 1;
-    constructor(string memory uri) ERC1155(uri) {
+    constructor(string memory uri) ERC1155("https://gateway.pinata.cloud/ipfs/QmVebXP3jEgjPjyJB1dy8Rv3dejyCat4LZHq3jdENm7ELx/{id}.json") {
     }
     function addClaimableCodeHashes(bytes32[] memory hashes) public onlyOwner {
         for(uint i = 0; i < hashes.length; i++) {
             vouchers[hashes[i]] = NFTVoucher(true, false);
         }
     }
+
+        function addClaimableCodes(string[] memory codes) public onlyOwner {
+        for(uint i = 0; i < codes.length; i++) {
+            vouchers[keccak256(codes[i])] = NFTVoucher(true, false);
+        }
+    }
+
+
     function mint(string memory code) public {
         bytes32 hash = keccak256(abi.encodePacked(code));
         require(vouchers[hash].exists, "Hash does not exist");
