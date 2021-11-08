@@ -1,18 +1,20 @@
 let voltaContract
-let contractAddress = "0x522B255efdD17E62AD64d371791cAb0a1dB67F79";
+let contractAddress = "0x3802Bd2569d4C1Ae289908321e714ae0eC71A92b";
 let hashes = [];
 
 window.addEventListener('load', (event) => {
-    console.log('The page has fully loaded ^ㅂ^')
+    
+
     loadWeb3();
     //generateSlug();
-
-    //sendClaim();
-
+   
+    sendClaim();
+    //addClaimableCodesToChain();
   
 
-
+console.log('The page has fully loaded ^ㅂ^')
 });
+
 
 
 
@@ -504,7 +506,7 @@ async function loadContract(){
     
     
   //  voltaContract = abi.at(contractAddress);
-voltaContract = new web3.eth.Contract(abi, "0x522B255efdD17E62AD64d371791cAb0a1dB67F79");
+voltaContract = new web3.eth.Contract(abi, "0x3802Bd2569d4C1Ae289908321e714ae0eC71A92b");
 console.log(voltaContract.methods);
   
 }
@@ -526,14 +528,26 @@ async function loadWeb3() {
     loadContract();
   }
   
-   function sendClaim(){
+function sendClaim(){
     document.getElementById("claimForm").addEventListener('submit',function(e){
         e.preventDefault();
         let claim = document.getElementById("nft-claim").value;
-        hashes.push(web3.utils.keccak256(claim));
-
         console.log(claim);
-        addClaimableCodesToChain(claim);
+       // let paddedClaim = "[" + `"`+ claim + `"` +"] ";
+      //  console.log(paddedClaim);
+        voltaContract.methods
+        .addClaimableCodes(claim)
+        .send({from: web3.eth.defaultAccount})
+        .then(succes => console.log(succes)) 
+        .catch(e => console.log(e));
+          
+        //addClaimableCodesToChain(claim)
+       // addClaimableCodesToChain(claim);
+
+        //hashes.push(web3.utils.keccak256(claim));
+
+       // console.log(claim);
+        
        // checkClaim(claim);
       //  checkClaim(claim);
         document.getElementById("nft-claim").value = "NOice ( ͡° ͜ʖ ͡°) ";
@@ -876,11 +890,17 @@ async function loadWeb3() {
 
     let tstclm =  ["greater-drive-mix-model-line-growth-thy-oldest-enough-pink"];
 
-    voltaContract.methods.addClaimableCodes(claim);
+    voltaContract.methods.addClaimableCodes(claim)
+    .send({from: web3.eth.defaultAccount})
+    .then(console.log())
+    .catch(console.log());
 
-    var event = clientReceiptContract.Deposit(function(error, result) {
-        if (!error)console.log(result);
-     });
+   voltaContract.events.postedClaimableCode({},(error,data) => {
+       if(error){
+           console.log(error);
+           return;
+       }
+   })
 
   }
   
