@@ -536,7 +536,7 @@ function sendClaim(){
        // let paddedClaim = "[" + `"`+ claim + `"` +"] ";
       //  console.log(paddedClaim);
         voltaContract.methods
-        .addClaimableCodes(claim)
+        .addClaimableCodes([claim])
         .send({from: web3.eth.defaultAccount})
         .then(succes => console.log(succes)) 
         .catch(e => console.log(e));
