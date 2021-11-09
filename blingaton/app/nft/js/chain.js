@@ -1,5 +1,5 @@
 let voltaContract
-let contractAddress = "0x3802Bd2569d4C1Ae289908321e714ae0eC71A92b";
+let contractAddress = "0x0F274185317E741CeDE2177Be9688f49E69C04Db";
 let hashes = [];
 
 window.addEventListener('load', (event) => {
@@ -506,7 +506,7 @@ async function loadContract(){
     
     
   //  voltaContract = abi.at(contractAddress);
-voltaContract = new web3.eth.Contract(abi, "0x3802Bd2569d4C1Ae289908321e714ae0eC71A92b");
+voltaContract = new web3.eth.Contract(abi, "0x0F274185317E741CeDE2177Be9688f49E69C04Db");
 console.log(voltaContract.methods);
   
 }
@@ -535,22 +535,28 @@ function sendClaim(){
         console.log(claim);
      
         voltaContract.methods
-        //ARRAY
-        .addClaimableCodes([claim])
+        .mint(claim)
         .send({from: web3.eth.defaultAccount})
-        .then(succes => console.log(succes))
-             
+        .then(succes => console.log(succes))   
         .catch(e => console.log(e));
           
-        //addClaimableCodesToChain(claim)
-       // addClaimableCodesToChain(claim);
 
-        //hashes.push(web3.utils.keccak256(claim));
 
-       // console.log(claim);
-        
-       // checkClaim(claim);
-      //  checkClaim(claim);
+       /*
+       
+  function clientMint( code) {
+
+    voltaContract.methods.mint(code)
+    .send({from: web3.eth.defaultAccount})
+    .then(succes => console.log(succes))
+    .catch(e => console.log(e));
+
+  }
+       
+       
+       */ 
+
+  
         document.getElementById("nft-claim").value = "NOice ( ͡° ͜ʖ ͡°) ";
     });
 
