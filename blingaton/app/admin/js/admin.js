@@ -5,18 +5,9 @@ let hashes = [];
 window.addEventListener('load', (event) => {
     console.log('The page has fully loaded ^ㅂ^')
     loadWeb3();
-    //generateSlug();
-
-    //sendClaim();
     generateQuantity();
-    
-
   
-
-
 });
-
-
 
 
 //voltaContract = abi.at(contractAddress);
@@ -503,7 +494,7 @@ async function loadContract(){
         "type": "function"
       }
     ];
-    
+  
   //  voltaContract = abi.at(contractAddress);
 voltaContract = new web3.eth.Contract(abi, "0x0F274185317E741CeDE2177Be9688f49E69C04Db");
 console.log(voltaContract.methods);
@@ -859,18 +850,13 @@ async function loadWeb3() {
   } 
 
   function adminSlugGenerator(number){
-
-
     let slugArr = [];
 
     for(let i=0; i < number;i++){
 
-    
         slugArr.push( generateSlug());
         
-        }
-
-        //console.log(slugArr);
+        
 
         return slugArr;
 
@@ -897,8 +883,7 @@ async function loadWeb3() {
 
       console.log(quantity);
 
-      
-      //console.log(adminSlugGenerator(quantity));
+  
 
       let slugArr = [];
       let slugPass = [];
@@ -914,13 +899,6 @@ async function loadWeb3() {
       console.log(slugPass);
 
       output(slugPass);
-
-  
-
-     // let entryCode = {slug: '', passphrase:''};
-     // document.getElementById("output").innerHTML += `<p>`+  slugArr[i] +  `</p> <br>`;
-        
-     
     })
 
     
