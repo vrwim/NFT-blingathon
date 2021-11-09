@@ -539,9 +539,7 @@ function sendClaim(){
         .addClaimableCodes([claim])
         .send({from: web3.eth.defaultAccount})
         .then(succes => console.log(succes))
-            voltaContract.postedClaimableCode(function(error,result){
-                if(!error) console.log(result);
-            }) 
+             
         .catch(e => console.log(e));
           
         //addClaimableCodesToChain(claim)
