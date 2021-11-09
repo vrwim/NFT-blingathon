@@ -1,5 +1,5 @@
 let voltaContract
-let contractAddress = "0x0F274185317E741CeDE2177Be9688f49E69C04Db";
+let contractAddress = "0xDF74bA1563e94D0E3BE1109A93aB42B9d2dB8126";
 let hashes = [];
 
 window.addEventListener('load', (event) => {
@@ -12,7 +12,13 @@ console.log('The page has fully loaded ^ㅂ^')
 async function loadContract(){
     let abi = [
         {
-            "inputs": [],
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "uri",
+                    "type": "string"
+                }
+            ],
             "stateMutability": "nonpayable",
             "type": "constructor"
         },
@@ -154,19 +160,6 @@ async function loadContract(){
             "type": "event"
         },
         {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": false,
-                    "internalType": "string[]",
-                    "name": "codes",
-                    "type": "string[]"
-                }
-            ],
-            "name": "postedClaimableCode",
-            "type": "event"
-        },
-        {
             "inputs": [
                 {
                     "internalType": "bytes32[]",
@@ -267,9 +260,9 @@ async function loadContract(){
         {
             "inputs": [
                 {
-                    "internalType": "string",
+                    "internalType": "string[]",
                     "name": "code",
-                    "type": "string"
+                    "type": "string[]"
                 }
             ],
             "name": "mint",
@@ -448,25 +441,6 @@ async function loadContract(){
         {
             "inputs": [
                 {
-                    "internalType": "uint256",
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "name": "voucherHashes",
-            "outputs": [
-                {
-                    "internalType": "bytes32",
-                    "name": "",
-                    "type": "bytes32"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
                     "internalType": "bytes32",
                     "name": "",
                     "type": "bytes32"
@@ -492,7 +466,7 @@ async function loadContract(){
     
     
 //  voltaContract = abi.at(contractAddress);
-voltaContract = new web3.eth.Contract(abi, "0x0F274185317E741CeDE2177Be9688f49E69C04Db");
+voltaContract = new web3.eth.Contract(abi, "0xDF74bA1563e94D0E3BE1109A93aB42B9d2dB8126");
 console.log(voltaContract.methods);
   
 }
@@ -520,11 +494,7 @@ function sendClaim(){
         let claim = document.getElementById("nft-claim").value;
         console.log(claim);
      
-        voltaContract.methods
-        .mint(JSON.stringify(claim))
-        .send({from: web3.eth.defaultAccount})
-        .then(succes => console.log(succes))   
-        .catch(e => console.log(e));
+        clientMint(claim);
         document.getElementById("nft-claim").value = "NOice ( ͡° ͜ʖ ͡°) ";
     });
 
@@ -860,5 +830,60 @@ function sendClaim(){
 
   }
 
+
+  
+  function clientMint(code) {
+
+
+    voltaContract.methods.mint([code])
+    .send({from: web3.eth.defaultAccount})
+    .then(succes => console.log(succes))
+    .catch(e => console.log(e));
+
+  }
+
+
+  function addString(code) { 
+      voltaContract.methods.addClaimableCodes([code])
+      .send({from: web3.eth.defaultAccount})
+    .then(succes => console.log(succes))
+    .catch(e => console.log(e)); }
+
+//input format keccak 'apple' - 0x754a10e976ef61e474335eb6f2aba944473686d179ad7d337172f6efa923c0dd
+
+    function pushToChain(hash){
+        //console.log(hash);
+      //  let payloadHash = web3.utils.asciiToHex(hash);
+        //let payloadPad =  web3.utils.padLeft(payloadHash,64)
+
+    //  let tempHash = hash.toString();
+
+      //  console.log(typeof tempHash);
+
+      let payloadHash = web3.utils.toHex(hash);
+      console.log(payloadHash);
+      console.log(typeof payloadHash);
+
+      //let payloadHashBytes32 =  web3.utils.asciiToHex(payloadHash);
+
+     // console.log(payloadHashBytes32);
+      //console.log(typeof payloadHashBytes32);
+
+      
+     // let payloadPad =  web3.utils.padLeft(payloadHash,64)
+
+
+       
+
+     //   console.log(payloadPad);
+        
+      
+        voltaContract.methods.addClaimableCodeHashes([payloadHash])
+        .send({from: web3.eth.defaultAccount})
+        .then(succes => console.log(succes))
+        .catch(e => console.log(e));
+      
+      
+      }
 
 

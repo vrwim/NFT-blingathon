@@ -1,11 +1,12 @@
 let voltaContract
-let contractAddress = "0x0F274185317E741CeDE2177Be9688f49E69C04Db";
+let contractAddress = "0xDF74bA1563e94D0E3BE1109A93aB42B9d2dB8126";
 let hashes = [];
 
 window.addEventListener('load', (event) => {
     console.log('The page has fully loaded ^ㅂ^')
     loadWeb3();
     generateQuantity();
+    
   
 });
 
@@ -17,7 +18,13 @@ window.addEventListener('load', (event) => {
 async function loadContract(){
     let abi = [
       {
-        "inputs": [],
+        "inputs": [
+          {
+            "internalType": "string",
+            "name": "uri",
+            "type": "string"
+          }
+        ],
         "stateMutability": "nonpayable",
         "type": "constructor"
       },
@@ -159,19 +166,6 @@ async function loadContract(){
         "type": "event"
       },
       {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": false,
-            "internalType": "string[]",
-            "name": "codes",
-            "type": "string[]"
-          }
-        ],
-        "name": "postedClaimableCode",
-        "type": "event"
-      },
-      {
         "inputs": [
           {
             "internalType": "bytes32[]",
@@ -272,9 +266,9 @@ async function loadContract(){
       {
         "inputs": [
           {
-            "internalType": "string",
+            "internalType": "string[]",
             "name": "code",
-            "type": "string"
+            "type": "string[]"
           }
         ],
         "name": "mint",
@@ -453,25 +447,6 @@ async function loadContract(){
       {
         "inputs": [
           {
-            "internalType": "uint256",
-            "name": "",
-            "type": "uint256"
-          }
-        ],
-        "name": "voucherHashes",
-        "outputs": [
-          {
-            "internalType": "bytes32",
-            "name": "",
-            "type": "bytes32"
-          }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
             "internalType": "bytes32",
             "name": "",
             "type": "bytes32"
@@ -496,7 +471,7 @@ async function loadContract(){
     ];
   
   //  voltaContract = abi.at(contractAddress);
-voltaContract = new web3.eth.Contract(abi, "0x0F274185317E741CeDE2177Be9688f49E69C04Db");
+voltaContract = new web3.eth.Contract(abi, "0xDF74bA1563e94D0E3BE1109A93aB42B9d2dB8126");
 console.log(voltaContract.methods);
   
 }
@@ -518,19 +493,19 @@ async function loadWeb3() {
     loadContract();
   }
   
-   function sendClaim(){
+   /* function sendClaim(){
       document.getElementById("claimForm").addEventListener('submit',function(e){
         e.preventDefault();
         let claim = document.getElementById("nft-claim").value;
         hashes.push(web3.utils.keccak256(claim));
 
         console.log(claim);
-        checkClaim(claim);
+       // checkClaim(claim);
       //  checkClaim(claim);
         document.getElementById("nft-claim").value = "NOice ( ͡° ͜ʖ ͡°) ";
     });
 
-  }
+  }*/
 
 
   function generateSlug(){
@@ -831,23 +806,6 @@ async function loadWeb3() {
     console.log( hashes.includes(web3.utils.keccak256(x)));
   }
 
-  function doTest(){
-
-        let testSlug = generateSlug();
-
-        generateHashAndStore(testSlug);
-
-        console.log(hashes);
-
-        let hash = generateHash(testSlug);
-
-        console.log(equals(hashes,hash));
-
-
-        checkClaim(testSlug)
-
-
-  } 
 
   function adminSlugGenerator(number){
     let slugArr = [];
@@ -863,50 +821,10 @@ async function loadWeb3() {
   }
 
 
-  function pushToChain(arr){
-
-    voltaContract.methods.addClaimableCodeHashes([web3.utils.asciiToHex(arr)])
-    .send({from: web3.eth.defaultAccount})
-    .then(succes => console.log(succes))
-    .catch(e => console.log(e));
+ 
 
 
-  }
 
-  
-
-   function generateQuantity(){
-
-      document.getElementById("quantityForm").addEventListener('submit',function(e){
-      e.preventDefault();
-      let quantity =  document.getElementById("quantity").value;
-
-      console.log(quantity);
-
-  
-
-      let slugArr = [];
-      let slugPass = [];
-
-      for(let i = 0; i < quantity ; i++){
-
-        tempSlug = generateSlug();
-        slugArr.push(tempSlug);
-        slugPass.push(generateHash(tempSlug));
-      }
-
-      console.log(slugArr); 
-      console.log(slugPass);
-
-      output(slugPass);
-    })
-
-    
-
-    
-
-
-  }
 
   function output(array){
     for(let i = 0; array.length;i++){
@@ -915,13 +833,67 @@ async function loadWeb3() {
   }
   
 
-  function clientMint( code) {
 
-    voltaContract.methods.mint(code)
+   
+}
+
+function output(array){
+  for(let i = 0; array.length;i++){
+    document.getElementById("output").innerHTML += `<p>`+  array[i]  +  `</p> <br>`;
+   }
+}
+
+function generateQuantity(){
+
+  document.getElementById("quantityForm").addEventListener('submit',function(e){
+  e.preventDefault();
+  let quantity =  document.getElementById("quantity").value;
+
+  console.log(quantity);
+
+
+
+  let slugArr = [];
+  let slugPass = [];
+
+  for(let i = 0; i < quantity ; i++){
+
+    tempSlug = generateSlug();
+    slugArr.push(tempSlug);
+    slugPass.push(generateHash(tempSlug));
+  }
+
+  console.log(slugArr); 
+  console.log(slugPass);
+
+  output(slugPass);
+}) 
+
+
+}
+
+function pushToChain(hash){
+
+  let payload = byte32(web3.utils.asciiToHex(hash));
+
+  
+
+  voltaContract.methods.addClaimableCodeHashes([payload])
+  .send({from: web3.eth.defaultAccount})
+  .then(succes => console.log(succes))
+  .catch(e => console.log(e));
+
+
+}
+
+    function clientMint(code) {
+
+
+      
+
+    voltaContract.methods.mint(code.toString())
     .send({from: web3.eth.defaultAccount})
     .then(succes => console.log(succes))
     .catch(e => console.log(e));
 
   }
-
-}
