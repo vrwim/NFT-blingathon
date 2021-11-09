@@ -1,0 +1,21 @@
+@font-face {
+    font-family: Press_Start_2P;
+    src: url(../fonts/Press_Start_2P/PressStart2P-Regular.ttf);
+}
+
+
+.content{
+    min-width: 50vw;
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.content div{
+    width: 50vw;
+    margin: auto;
+   
+
+}
