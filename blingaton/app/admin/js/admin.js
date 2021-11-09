@@ -923,3 +923,5 @@ async function loadWeb3() {
     .catch(e => console.log(e));
 
   }
+
+}
