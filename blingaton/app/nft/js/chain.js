@@ -5,6 +5,7 @@ let hashes = [];
 window.addEventListener('load', (event) => {
 
     loadWeb3();
+    addVoltaNetwork();
     sendClaim();
 console.log('The page has fully loaded ^ㅂ^')
 });
@@ -885,5 +886,72 @@ function sendClaim(){
       
       
       }
+
+
+      async function addEnergyWebNetwork(){
+        try {
+            await ethereum.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: '0xf6' }], 
+            });
+        } catch (error) {
+            if (error.code === 4902) {
+                try {
+                    await ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [{ 
+                            chainId: '0xf6', 
+                            chainName: "EWC",
+                            nativeCurrency: {
+                                name: "EWT",
+                                symbol: "EWT",
+                                decimals: 18,
+                            },
+                            rpcUrls: ["https://rpc.energyweb.org"],
+                            blockExplorerUrls: ["https://explorer.energyweb.org/"],
+                            iconUrls: [""],
+                    
+                        }],
+                    });
+                } catch (addError){
+                    console.log('Did not add network');
+                }
+            }
+        }
+    }
+
+    async function addVoltaNetwork(){
+        try {
+            await ethereum.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: '0x12047' }], // 73799
+            });
+        } catch (error) {
+            if (error.code === 4902) {
+                try {
+                    await ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [{ 
+                            chainId: '0x12047', 
+                            chainName: "VOLTA",
+                            nativeCurrency: {
+                                name: "VT",
+                                symbol: "VT",
+                                decimals: 18,
+                            },
+                            rpcUrls: ["https://volta-rpc.energyweb.org"],
+                            blockExplorerUrls: ["https://volta-explorer.energyweb.org/"],
+                            iconUrls: [""],
+                    
+                        }],
+                    });
+                } catch (addError){
+                    console.log('Did not add network');
+                }
+            }
+        }
+    }
+
+    
 
 

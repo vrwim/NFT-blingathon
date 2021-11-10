@@ -1,0 +1,59 @@
+{
+  "name" : "Blingathon NFT",
+  "description" : "NFT collection for Blingathon residential participants",
+  "properties" : {
+    "schema" : {
+      "$schema" : "https://json-schema.org/draft/2020-12/schema",
+      "title" : "BlingathonNFT Schema",
+      "type" : "object",
+      "properties" : {
+        "summary" : {
+          "description" : "Expanded lore around the card",
+          "type" : "string"
+        },
+        "full_story" : {
+          "description" : "IPFS link to the full story",
+          "type" : "string"
+        },
+        "alignment" : {
+          "description" : "Character alignment of the card. Is an enum value from 0 (None), starting with 1 (Lawful Good) to 9 (Chaotic Evil)",
+          "type" : "number"
+        },
+        "powers" : {
+          "description" : "Buffs and weaknesses of the card",
+          "type" : "array",
+          "items" : {
+            "type" : "object",
+            "properties" : {
+              "key" : {
+                "description" : "Identifier of the power",
+                "type" : "string"
+              },
+              "value" : {
+                "description" : "Positive or negative number",
+                "type" : "integer"
+              }
+            },
+            "required" : [
+              "name",
+              "value"
+            ]
+          }
+        },
+        "items" : {
+          "description" : "Items belonging to the card that provide special abilities, represented by enum",
+          "type" : "array",
+          "items" : {
+            "type" : "number"
+          },
+          "uniqueItems" : true
+        }
+      },
+      "required" : [
+        "summary",
+        "alignment",
+        "powers"
+      ]
+    }
+  }
+}

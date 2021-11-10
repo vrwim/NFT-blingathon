@@ -1,0 +1,39 @@
+{
+  "name" : "Blingathon Booze",
+  "description" : "Booze is the Genesis NFT",
+  "image" : "https://gateway.pinata.cloud/ipfs/QmbaoXVLctQkdtojE3zdfzkrHFLkNqyYDQxE1SFEvk1Nx6/booze.png",
+  "properties" : {
+    "summary" : "Summary text here",
+    "full_story" : "Link to full story IPFS",
+    "alignment" : 8,
+    "powers" : [
+      {
+        "key" : "Active Listening & Communication",
+        "value" : 9
+      },
+      {
+        "key" : "Counting & Math",
+        "value" : 8
+      },
+      {
+        "key" : "Emotional Coping Skills",
+        "value" : 8
+      },
+      {
+        "key" : "Strategy & Tactics",
+        "value" : 10
+      },
+      {
+        "key" : "Visuospatial Skills",
+        "value" : 10
+      },
+      {
+        "key" : "Imagination",
+        "value" : 9
+      }
+    ],
+    "items" : [
+      1
+    ]
+  }
+}
