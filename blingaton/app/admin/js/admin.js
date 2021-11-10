@@ -1,5 +1,5 @@
 let voltaContract
-let contractAddress = "0xDF74bA1563e94D0E3BE1109A93aB42B9d2dB8126";
+let contractAddress = "0xb2eFC7E841A5E0e12f6CF29ACF9C74d20a5Ab191";
 let hashes = [];
 
 window.addEventListener('load', (event) => {
@@ -429,7 +429,7 @@ async function loadContract(){
         "inputs": [
           {
             "internalType": "uint256",
-            "name": "",
+            "name": "_tokenId",
             "type": "uint256"
           }
         ],
@@ -471,7 +471,7 @@ async function loadContract(){
     ];
   
   //  voltaContract = abi.at(contractAddress);
-voltaContract = new web3.eth.Contract(abi, "0xDF74bA1563e94D0E3BE1109A93aB42B9d2dB8126");
+voltaContract = new web3.eth.Contract(abi, "0xb2eFC7E841A5E0e12f6CF29ACF9C74d20a5Ab191");
 console.log(voltaContract.methods);
   
 }

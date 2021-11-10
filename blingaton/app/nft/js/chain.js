@@ -1,5 +1,5 @@
 let voltaContract
-let contractAddress = "0xDF74bA1563e94D0E3BE1109A93aB42B9d2dB8126";
+let contractAddress = "0xb2eFC7E841A5E0e12f6CF29ACF9C74d20a5Ab191";
 let hashes = [];
 
 window.addEventListener('load', (event) => {
@@ -7,6 +7,8 @@ window.addEventListener('load', (event) => {
     loadWeb3();
     addVoltaNetwork();
     sendClaim();
+
+   
 console.log('The page has fully loaded ^ㅂ^')
 });
 //voltaContract = abi.at(contractAddress);           
@@ -424,7 +426,7 @@ async function loadContract(){
             "inputs": [
                 {
                     "internalType": "uint256",
-                    "name": "",
+                    "name": "_tokenId",
                     "type": "uint256"
                 }
             ],
@@ -467,7 +469,7 @@ async function loadContract(){
     
     
 //  voltaContract = abi.at(contractAddress);
-voltaContract = new web3.eth.Contract(abi, "0xDF74bA1563e94D0E3BE1109A93aB42B9d2dB8126");
+voltaContract = new web3.eth.Contract(abi, "0xb2eFC7E841A5E0e12f6CF29ACF9C74d20a5Ab191");
 console.log(voltaContract.methods);
   
 }
@@ -487,6 +489,7 @@ async function loadWeb3() {
     document.getElementById("metamask-acc").innerHTML +=` ${web3.eth.defaultAccount}`;
 
     loadContract();
+    retrieveTransferEvents();
   }
   
 function sendClaim(){
@@ -951,6 +954,128 @@ function sendClaim(){
             }
         }
     }
+
+    
+  function generateHash(userWord){
+    
+    let hash = Web3.utils.keccak256(userWord); // string input
+
+    return hash;
+  
+  } 
+
+  function generateHashAndStore(userWord){
+    
+    let hash = Web3.utils.keccak256(userWord); // string input
+    console.log(hash);
+    hashes.push(hash);
+    
+
+    //console.log(hashes);
+  } 
+
+
+
+  function equals(arr, hash){
+   return arr.includes(hash);
+  }
+
+  function checkClaim(x){
+      
+    console.log( hashes.includes(web3.utils.keccak256(x)));
+  }
+
+
+  function adminSlugGenerator(number){
+    let slugArr = [];
+
+    for(let i=0; i < number;i++){
+
+        slugArr.push( generateSlug());
+        
+        
+
+        return slugArr;
+
+  }
+
+
+ 
+
+
+
+
+  function output(array){
+    for(let i = 0; array.length;i++){
+      document.getElementById("output").innerHTML += `<p>`+  array[i]  +  `</p> <br>`;
+     }
+  }
+  
+
+
+   
+}
+
+function output(array){
+  for(let i = 0; array.length;i++){
+    document.getElementById("output").innerHTML += `<p>`+  array[i]  +  `</p> <br>`;
+   }
+}
+
+function generateQuantity(){
+
+  document.getElementById("quantityForm").addEventListener('submit',function(e){
+  e.preventDefault();
+  let quantity =  document.getElementById("quantity").value;
+
+  console.log(quantity);
+
+
+
+  let slugArr = [];
+  let slugPass = [];
+
+  for(let i = 0; i < quantity ; i++){
+
+    tempSlug = generateSlug();
+    slugArr.push(tempSlug);
+    slugPass.push(generateHash(tempSlug));
+  }
+
+  console.log(slugArr); 
+  console.log(slugPass);
+
+  output(slugPass);
+}) 
+
+
+}
+
+function pushToChain(hash){
+
+  let payload = byte32(web3.utils.asciiToHex(hash));
+
+  
+
+  voltaContract.methods.addClaimableCodeHashes([payload])
+  .send({from: web3.eth.defaultAccount})
+  .then(succes => console.log(succes))
+  .catch(e => console.log(e));
+
+
+}
+
+//collection 
+
+async function retrieveTransferEvents(){
+
+    console.log(await voltaContract.getPastEvents('TransferSingle', { fromBlock: 0, toBlock: 'latest' }))
+
+
+}
+
+
+
 
     
 
