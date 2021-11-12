@@ -4,7 +4,7 @@ pragma solidity ^0.8.9;
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/contracts/token/ERC1155/ERC1155.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/contracts/access/Ownable.sol";
 
-contract BLINGhack is ERC1155, Ownable {
+contract BLINGathon is ERC1155, Ownable {
     struct NFTVoucher {
         bool exists;
         bool claimed;
@@ -13,7 +13,7 @@ contract BLINGhack is ERC1155, Ownable {
     mapping(bytes32 => NFTVoucher) public vouchers;
     uint public nextId = 1;
     
-    constructor(string memory uri) ERC1155("https://gateway.pinata.cloud/ipfs/QmTChVvgzubRiwFA5W75Z3crzmnBJGHgNp8txfZazyrKKS/{id}.json") {
+    constructor() ERC1155("https://gateway.pinata.cloud/ipfs/QmNNLwUDfALVUo4uLj34s62LxVg4FNRF94k3d17nETerAW/{id}.json") {
         
     }
     
@@ -24,7 +24,7 @@ contract BLINGhack is ERC1155, Ownable {
     }
     
     function contractURI() public pure returns (string memory) {
-        return "https://gateway.pinata.cloud/ipfs/QmTChVvgzubRiwFA5W75Z3crzmnBJGHgNp8txfZazyrKKS/{id}.json";
+        return "https://gateway.pinata.cloud/ipfs/QmNNLwUDfALVUo4uLj34s62LxVg4FNRF94k3d17nETerAW/{id}.json";
     }
     
     function mint(string memory code) public {
