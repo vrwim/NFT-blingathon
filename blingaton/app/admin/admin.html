@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,28 +8,31 @@
     <title>Admin</title>
     <link href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css" rel="stylesheet" />
     <script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
-    
-
-   
 </head>
-<body>
 
-     
+<body>
     <form id="quantityForm">
         <label for="quantity">Quantity of vouchers</label>
         <input type="number" id="quantity" name="quantity" min="1">
-        <input type="submit">
-
+        <input type="submit" value="Maak">
     </form>
-    
-
-    <p id="output"> </p>
-
-
-
-    
-  
+    <table id="output" class="nes-table is-bordered is-centered">
+        <tr>
+            <th>
+                Slug
+            </th>
+            <th>
+                Hash
+            </th>
+            <th>
+                Exists
+            </th>
+            <th>
+                Claimed
+            </th>
+        </tr>
+    </table>
     <script src="js/admin.js"> </script>
-  
 </body>
+
 </html>
