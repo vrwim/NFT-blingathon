@@ -23,12 +23,12 @@ contract BLINGhack is ERC1155, Ownable {
         }
     }
     
-    function contractURI() public view returns (string memory) {
+    function contractURI() public pure returns (string memory) {
         return "https://gateway.pinata.cloud/ipfs/QmTChVvgzubRiwFA5W75Z3crzmnBJGHgNp8txfZazyrKKS/{id}.json";
     }
     
-    function mint(string[] memory code) public {
-        bytes32 hash = keccak256(abi.encodePacked(code[0]));
+    function mint(string memory code) public {
+        bytes32 hash = keccak256(abi.encodePacked(code));
         require(vouchers[hash].exists, "Hash does not exist");
         require(!vouchers[hash].claimed, "NFT has been claimed");
         _mint(msg.sender, nextId, 1, abi.encodePacked(block.number));
