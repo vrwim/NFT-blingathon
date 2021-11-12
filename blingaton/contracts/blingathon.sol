@@ -15,11 +15,11 @@ contract BLINGhack is ERC1155, Ownable {
     // 0xb2eFC7E841A5E0e12f6CF29ACF9C74d20a5Ab191
     
     //https://rinkeby.etherscan.io/address/0xb2eFC7E841A5E0e12f6CF29ACF9C74d20a5Ab191
-    //https://testnets.opensea.io/collection/unidentified-contract-symztyf5xp
+    //
 
     mapping(bytes32 => NFTVoucher) public vouchers;
     uint public nextId = 1;
-    constructor(string memory uri) ERC1155("https://https://gateway.pinata.cloud/ipfs/QmTChVvgzubRiwFA5W75Z3crzmnBJGHgNp8txfZazyrKKS/{id}.json") {
+    constructor(string memory uri) ERC1155("https://gateway.pinata.cloud/ipfs/QmTChVvgzubRiwFA5W75Z3crzmnBJGHgNp8txfZazyrKKS/{id}.json") {
     }
     function addClaimableCodeHashes(bytes32[] memory hashes) public onlyOwner {
         for(uint i = 0; i < hashes.length; i++) {
@@ -33,12 +33,16 @@ contract BLINGhack is ERC1155, Ownable {
         }
     }
     
-    function uri(uint256 _tokenId) override public view returns(string memory){
-        return string(abi.encodePacked("https://https://gateway.pinata.cloud/ipfs/QmTChVvgzubRiwFA5W75Z3crzmnBJGHgNp8txfZazyrKKS/",
+   /* function uri(uint256 _tokenId) override public view returns(string memory){
+        return string(abi.encodePacked("https://gateway.pinata.cloud/ipfs/QmTChVvgzubRiwFA5W75Z3crzmnBJGHgNp8txfZazyrKKS/",
         Strings.toString(_tokenId),".json"
         )
         
         );
+    }*/
+    
+    function contractURI() public view returns (string memory) {
+        return "https://gateway.pinata.cloud/ipfs/QmTChVvgzubRiwFA5W75Z3crzmnBJGHgNp8txfZazyrKKS/{id}.json";
     }
     
     
