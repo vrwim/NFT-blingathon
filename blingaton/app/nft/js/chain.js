@@ -1,34 +1,27 @@
 'use strict'
 
-let voltaContract
+let contract
 let contractAddress = "0x34090Cc1df6D79aA28a7b1a50fe365b55aE4Ce45";
-let hashes = [];
 let ipfsAddress = 'https://gateway.pinata.cloud/ipfs/QmTChVvgzubRiwFA5W75Z3crzmnBJGHgNp8txfZazyrKKS/'
 
 window.addEventListener('load', (event) => {
-
     loadWeb3();
     addVoltaNetwork();
-    sendClaim();
-   
+    setupFormEvents();
 
-   
-console.log('The page has fully loaded ^ㅂ^')
+    console.log('The page has fully loaded ^ㅂ^')
 });
 
-
-
-async function retrieveTransferEvents(){
- try {
-        let succesArr = await voltaContract.getPastEvents('TransferSingle', { fromBlock: 0, toBlock: 'latest' });
+async function retrieveTransferEvents() {
+    try {
+        let succesArr = await contract.getPastEvents('TransferSingle', { fromBlock: 0, toBlock: 'latest' });
         console.log(succesArr);
-    } catch(error){
-        console.log(error.message);}}
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
-//voltaContract = abi.at(contractAddress); 
-
-
-async function loadContract(){
+async function loadContract() {
     let abi = [
         {
             "inputs": [
@@ -612,247 +605,143 @@ async function loadContract(){
             "type": "function"
         }
     ];
-    
-  
 
-//  voltaContract = abi.at(contractAddress);
-voltaContract = new web3.eth.Contract(abi, "0x34090Cc1df6D79aA28a7b1a50fe365b55aE4Ce45");
-console.log(voltaContract.methods);
-  retrieveTransferEvents();
+    contract = new web3.eth.Contract(abi, contractAddress);
+    console.log(contract.methods);
+    retrieveTransferEvents();
 }
 
-function display (arr){
-
-    for(let i = 0; i < arr.length ; i++){
-         console.log(arr[i].returnValues.id) ;
+function display(arr) {
+    for (let i = 0; i < arr.length; i++) {
+        console.log(arr[i].returnValues.id);
     }
-  
-
 }
+
 async function loadWeb3() {
-    if (ethereum) {
-      web3 = new Web3(ethereum);
-      await ethereum.enable();
+    if (window.ethereum) {
+        web3 = new Web3(window.ethereum);
+        await window.ethereum.enable();
     } else {
-      alert("MetaMask not found!");
-      return;
+        alert("MetaMask not found!");
+        return;
     }
 
     let accounts = await web3.eth.getAccounts();
     web3.eth.defaultAccount = accounts[0];
     console.log(`Your account is ${web3.eth.defaultAccount}`);
-    document.getElementById("metamask-acc").innerHTML +=` ${web3.eth.defaultAccount}`;
-    
-    loadContract();
-   
-  }
+    document.getElementById("metamask-acc").innerHTML += ` ${web3.eth.defaultAccount}`;
 
-function sendClaim(){
-    document.getElementById("claimForm").addEventListener('submit',function(e){
+    loadContract();
+}
+
+function setupFormEvents() {
+    document.getElementById("claimForm").addEventListener('submit', function (e) {
         e.preventDefault();
         let claim = document.getElementById("nft-claim").value;
         console.log(claim);
-     
+
         clientMint(claim);
         document.getElementById("nft-claim").value = "NOice ( ͡° ͜ʖ ͡°) ";
     });
+}
 
-  }
-
-  function leftFillNum(num) {
+function leftFillNum(num) {
     let format = ".json";
     let paddedNum = num.toString().padStart(64, 0);
-    let metadataJSON  = paddedNum.concat(format);
+    let metadataJSON = paddedNum.concat(format);
     console.log(metadataJSON);
     return metadataJSON;
-
 }
 
-
- 
-
- 
-
-  
-
-
-
-
-
-
-
-  
-  function clientMint(code) {
-
-
-    voltaContract.methods.mint([code])
-    .send({from: web3.eth.defaultAccount})
-    .then(succes => console.log(succes))
-    .catch(e => console.log(e));
-
-  }
-
-
-  function addString(code) { 
-      voltaContract.methods.addClaimableCodes([code])
-      .send({from: web3.eth.defaultAccount})
-    .then(succes => console.log(succes))
-    .catch(e => console.log(e)); }
-
-//input format keccak 'apple' - 0x754a10e976ef61e474335eb6f2aba944473686d179ad7d337172f6efa923c0dd
-
-    function pushToChain(hash){
-        //console.log(hash);
-      //  let payloadHash = web3.utils.asciiToHex(hash);
-        //let payloadPad =  web3.utils.padLeft(payloadHash,64)
-
-    //  let tempHash = hash.toString();
-
-      //  console.log(typeof tempHash);
-
-      let payloadHash = web3.utils.toHex(hash);
-      console.log(payloadHash);
-      console.log(typeof payloadHash);
-
-      //let payloadHashBytes32 =  web3.utils.asciiToHex(payloadHash);
-
-     // console.log(payloadHashBytes32);
-      //console.log(typeof payloadHashBytes32);
-
-      
-     // let payloadPad =  web3.utils.padLeft(payloadHash,64)
-
-
-       
-
-     //   console.log(payloadPad);
-        
-      
-        voltaContract.methods.addClaimableCodeHashes([payloadHash])
-        .send({from: web3.eth.defaultAccount})
+function clientMint(code) {
+    contract.methods.mint([code])
+        .send({ from: web3.eth.defaultAccount })
         .then(succes => console.log(succes))
         .catch(e => console.log(e));
-      
-      
-      }
-
-
-      async function addEnergyWebNetwork(){
-        try {
-            await ethereum.request({
-                method: 'wallet_switchEthereumChain',
-                params: [{ chainId: '0xf6' }], 
-            });
-        } catch (error) {
-            if (error.code === 4902) {
-                try {
-                    await ethereum.request({
-                        method: 'wallet_addEthereumChain',
-                        params: [{ 
-                            chainId: '0xf6', 
-                            chainName: "EWC",
-                            nativeCurrency: {
-                                name: "EWT",
-                                symbol: "EWT",
-                                decimals: 18,
-                            },
-                            rpcUrls: ["https://rpc.energyweb.org"],
-                            blockExplorerUrls: ["https://explorer.energyweb.org/"],
-                            iconUrls: [""],
-                    
-                        }],
-                    });
-                } catch (addError){
-                    console.log('Did not add network');
-                }
-            }
-        }
-    }
-
-    async function addVoltaNetwork(){
-        try {
-            await ethereum.request({
-                method: 'wallet_switchEthereumChain',
-                params: [{ chainId: '0x12047' }], // 73799
-                
-            });
-        } catch (error) {
-            if (error.code === 4902) {
-                try {
-                    await ethereum.request({
-                        method: 'wallet_addEthereumChain',
-                        params: [{ 
-                            chainId: '0x12047', 
-                            chainName: "VOLTA",
-                            nativeCurrency: {
-                                name: "VT",
-                                symbol: "VT",
-                                decimals: 18,
-                            },
-                            rpcUrls: ["https://volta-rpc.energyweb.org"],
-                            blockExplorerUrls: ["https://volta-explorer.energyweb.org/"],
-                            iconUrls: [""],
-                    
-                        }],
-                    });
-                } catch (addError){
-                    console.log('Did not add network');
-                }
-            }
-        }
-    }
-
-  
-
-
-
- 
-
-
-
-
- 
-
-
-
-
-  function output(array){
-    for(let i = 0; array.length;i++){
-      document.getElementById("output").innerHTML += `<p>`+  array[i]  +  `</p> <br>`;
-     }
-  }
-  
-
-
-   
-
-
-
-
-
-
-
-//collection 
-
-
-
-function fetchPersonalNFT(arr){
-
-    arr.forEach(entries => {
-        if(entries.returnValues.to == web3.eth.defaultAccount){
-                let temp = (entries.returnValues.id);
-               // console.log(temp);
-               // leftFillNum(temp);
-                 fetch(ipfsAddress + leftFillNum(temp))
-                .then(response => response.json())
-                .then(error => console.log(error));
-                console.log(data.url);
-               
-        }    
-    }
-    );
-
 
 }
 
+async function addEnergyWebNetwork() {
+    try {
+        await ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: '0xf6' }],
+        });
+    } catch (error) {
+        if (error.code === 4902) {
+            try {
+                await ethereum.request({
+                    method: 'wallet_addEthereumChain',
+                    params: [{
+                        chainId: '0xf6',
+                        chainName: "EWC",
+                        nativeCurrency: {
+                            name: "EWT",
+                            symbol: "EWT",
+                            decimals: 18,
+                        },
+                        rpcUrls: ["https://rpc.energyweb.org"],
+                        blockExplorerUrls: ["https://explorer.energyweb.org/"],
+                        iconUrls: [""],
 
+                    }],
+                });
+            } catch (addError) {
+                console.log('Did not add network');
+            }
+        }
+    }
+}
+
+async function addVoltaNetwork() {
+    try {
+        await ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: '0x12047' }], // 73799
+
+        });
+    } catch (error) {
+        if (error.code === 4902) {
+            try {
+                await ethereum.request({
+                    method: 'wallet_addEthereumChain',
+                    params: [{
+                        chainId: '0x12047',
+                        chainName: "VOLTA",
+                        nativeCurrency: {
+                            name: "VT",
+                            symbol: "VT",
+                            decimals: 18,
+                        },
+                        rpcUrls: ["https://volta-rpc.energyweb.org"],
+                        blockExplorerUrls: ["https://volta-explorer.energyweb.org/"],
+                        iconUrls: [""],
+
+                    }],
+                });
+            } catch (addError) {
+                console.log('Did not add network');
+            }
+        }
+    }
+}
+
+function output(array) {
+    for (let i = 0; array.length; i++) {
+        document.getElementById("output").innerHTML += `<p>` + array[i] + `</p> <br>`;
+    }
+}
+
+function fetchPersonalNFT(arr) {
+    arr.forEach(entries => {
+        if (entries.returnValues.to == web3.eth.defaultAccount) {
+            let temp = (entries.returnValues.id);
+            // console.log(temp);
+            // leftFillNum(temp);
+            fetch(ipfsAddress + leftFillNum(temp))
+                .then(response => response.json())
+                .then(error => console.log(error));
+            console.log(data.url);
+        }
+    });
+}
