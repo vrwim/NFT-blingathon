@@ -24,13 +24,7 @@ async function retrieveTransferEvents() {
 async function loadContract() {
     let abi = [
         {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "uri",
-                    "type": "string"
-                }
-            ],
+            "inputs": [],
             "stateMutability": "nonpayable",
             "type": "constructor"
         },
@@ -76,19 +70,6 @@ async function loadContract() {
                 }
             ],
             "name": "OwnershipTransferred",
-            "type": "event"
-        },
-        {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": false,
-                    "internalType": "address",
-                    "name": "account",
-                    "type": "address"
-                }
-            ],
-            "name": "Paused",
             "type": "event"
         },
         {
@@ -185,19 +166,6 @@ async function loadContract() {
             "type": "event"
         },
         {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": false,
-                    "internalType": "address",
-                    "name": "account",
-                    "type": "address"
-                }
-            ],
-            "name": "Unpaused",
-            "type": "event"
-        },
-        {
             "inputs": [
                 {
                     "internalType": "bytes32[]",
@@ -206,19 +174,6 @@ async function loadContract() {
                 }
             ],
             "name": "addClaimableCodeHashes",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "string[]",
-                    "name": "codes",
-                    "type": "string[]"
-                }
-            ],
-            "name": "addClaimableCodes",
             "outputs": [],
             "stateMutability": "nonpayable",
             "type": "function"
@@ -272,70 +227,6 @@ async function loadContract() {
             "type": "function"
         },
         {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "account",
-                    "type": "address"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "tokenId",
-                    "type": "uint256"
-                }
-            ],
-            "name": "burn",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "account",
-                    "type": "address"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "id",
-                    "type": "uint256"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "value",
-                    "type": "uint256"
-                }
-            ],
-            "name": "burn",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "account",
-                    "type": "address"
-                },
-                {
-                    "internalType": "uint256[]",
-                    "name": "ids",
-                    "type": "uint256[]"
-                },
-                {
-                    "internalType": "uint256[]",
-                    "name": "values",
-                    "type": "uint256[]"
-                }
-            ],
-            "name": "burnBatch",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
             "inputs": [],
             "name": "contractURI",
             "outputs": [
@@ -345,7 +236,7 @@ async function loadContract() {
                     "type": "string"
                 }
             ],
-            "stateMutability": "view",
+            "stateMutability": "pure",
             "type": "function"
         },
         {
@@ -375,9 +266,9 @@ async function loadContract() {
         {
             "inputs": [
                 {
-                    "internalType": "string[]",
+                    "internalType": "string",
                     "name": "code",
-                    "type": "string[]"
+                    "type": "string"
                 }
             ],
             "name": "mint",
@@ -406,26 +297,6 @@ async function loadContract() {
                     "internalType": "address",
                     "name": "",
                     "type": "address"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "pause",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "paused",
-            "outputs": [
-                {
-                    "internalType": "bool",
-                    "name": "",
-                    "type": "bool"
                 }
             ],
             "stateMutability": "view",
@@ -550,13 +421,6 @@ async function loadContract() {
                 }
             ],
             "name": "transferOwnership",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "unpause",
             "outputs": [],
             "stateMutability": "nonpayable",
             "type": "function"
