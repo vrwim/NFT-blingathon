@@ -13,12 +13,39 @@ window.addEventListener('load', (event) => {
 });
 
 async function retrieveTransferEvents() {
-    try {
+    
         let succesArr = await contract.getPastEvents('TransferSingle', { fromBlock: 0, toBlock: 'latest' });
-        console.log(succesArr);
-    } catch (error) {
-        console.log(error.message);
-    }
+        
+        succesArr.forEach(entries => {
+            if(entries.returnValues.to == web3.eth.defaultAccount){
+                let tempId = (entries.returnValues.id);
+                let ipfsLink = ipfsAddress + leftFillNum(tempId)
+
+                fetch(ipfsLink)
+                .then((res) => res.json ())
+                .then((data) => {
+                      let output ="";
+                      console.log(data.image);
+
+                      output += `
+
+                      <div class="flex-item-db">
+                      <a href=${ipfsLink}> <img src="${data.image}" </a> 
+                      <h2>${data.name} </h2>
+                      <p>${data.description} </p>
+                      
+                      
+                      
+                      `
+                      
+
+                      document.getElementById('output').innerHTML = output;
+
+                }).catch(function (err) {
+                    console.log(err);
+                });
+            }
+        });
 }
 
 async function loadContract() {
@@ -596,16 +623,3 @@ function output(array) {
     }
 }
 
-function fetchPersonalNFT(arr) {
-    arr.forEach(entries => {
-        if (entries.returnValues.to == web3.eth.defaultAccount) {
-            let temp = (entries.returnValues.id);
-            // console.log(temp);
-            // leftFillNum(temp);
-            fetch(ipfsAddress + leftFillNum(temp))
-                .then(response => response.json())
-                .then(error => console.log(error));
-            console.log(data.url);
-        }
-    });
-}
