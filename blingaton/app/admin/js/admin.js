@@ -1,5 +1,5 @@
 let voltaContract
-let contractAddress = "0xb2eFC7E841A5E0e12f6CF29ACF9C74d20a5Ab191";
+let contractAddress = "0x34090Cc1df6D79aA28a7b1a50fe365b55aE4Ce45";
 let hashes = [];
 
 window.addEventListener('load', (event) => {
@@ -70,6 +70,19 @@ async function loadContract(){
           }
         ],
         "name": "OwnershipTransferred",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "account",
+            "type": "address"
+          }
+        ],
+        "name": "Paused",
         "type": "event"
       },
       {
@@ -166,6 +179,19 @@ async function loadContract(){
         "type": "event"
       },
       {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "account",
+            "type": "address"
+          }
+        ],
+        "name": "Unpaused",
+        "type": "event"
+      },
+      {
         "inputs": [
           {
             "internalType": "bytes32[]",
@@ -247,6 +273,83 @@ async function loadContract(){
             "type": "address"
           },
           {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          }
+        ],
+        "name": "burn",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "account",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "value",
+            "type": "uint256"
+          }
+        ],
+        "name": "burn",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "account",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "ids",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "values",
+            "type": "uint256[]"
+          }
+        ],
+        "name": "burnBatch",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "contractURI",
+        "outputs": [
+          {
+            "internalType": "string",
+            "name": "",
+            "type": "string"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "account",
+            "type": "address"
+          },
+          {
             "internalType": "address",
             "name": "operator",
             "type": "address"
@@ -297,6 +400,26 @@ async function loadContract(){
             "internalType": "address",
             "name": "",
             "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "pause",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "paused",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
           }
         ],
         "stateMutability": "view",
@@ -426,10 +549,17 @@ async function loadContract(){
         "type": "function"
       },
       {
+        "inputs": [],
+        "name": "unpause",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
         "inputs": [
           {
             "internalType": "uint256",
-            "name": "_tokenId",
+            "name": "",
             "type": "uint256"
           }
         ],
@@ -471,7 +601,7 @@ async function loadContract(){
     ];
   
   //  voltaContract = abi.at(contractAddress);
-voltaContract = new web3.eth.Contract(abi, "0xb2eFC7E841A5E0e12f6CF29ACF9C74d20a5Ab191");
+voltaContract = new web3.eth.Contract(abi, "0x34090Cc1df6D79aA28a7b1a50fe365b55aE4Ce45");
 console.log(voltaContract.methods);
   
 }

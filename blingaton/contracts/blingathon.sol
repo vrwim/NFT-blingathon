@@ -1,21 +1,21 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.9;
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/contracts/token/ERC1155/ERC1155.sol";
 
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/contracts/access/Ownable.sol";
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/contracts/utils/Strings.sol";
 
-contract BLINGhack is ERC1155, Ownable {
+import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
+
+
+
+contract BLINGhack is ERC1155, Ownable, Pausable, ERC1155Burnable {
     struct NFTVoucher {
         bool exists;
         bool claimed;
     }
 
-    //to do add event to listen for succesfully added hashes
-    // 0xb2eFC7E841A5E0e12f6CF29ACF9C74d20a5Ab191
-    
-    //https://rinkeby.etherscan.io/address/0xb2eFC7E841A5E0e12f6CF29ACF9C74d20a5Ab191
-    //
+
 
     mapping(bytes32 => NFTVoucher) public vouchers;
     uint public nextId = 1;
@@ -56,6 +56,21 @@ contract BLINGhack is ERC1155, Ownable {
         vouchers[hash].claimed = true;
         nextId++;
     }
+    
+    function pause() public onlyOwner {
+        _pause();
+    }
+
+    function unpause() public onlyOwner {
+        _unpause();
+    }
+    
+    function burn(address account, uint256 tokenId) public onlyOwner {
+        _burn(account,tokenId,1);
+        
+    }
+    
+    
 /*    function getOwnedTokens() public view returns (uint[] memory owned, uint[] memory notOwned) {
         uint[] memory owned;
         uint[] memory notOwned;

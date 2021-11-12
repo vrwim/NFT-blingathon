@@ -1,16 +1,34 @@
+'use strict'
+
 let voltaContract
-let contractAddress = "0xb2eFC7E841A5E0e12f6CF29ACF9C74d20a5Ab191";
+let contractAddress = "0x34090Cc1df6D79aA28a7b1a50fe365b55aE4Ce45";
 let hashes = [];
+let ipfsAddress = 'https://gateway.pinata.cloud/ipfs/QmTChVvgzubRiwFA5W75Z3crzmnBJGHgNp8txfZazyrKKS/'
 
 window.addEventListener('load', (event) => {
 
     loadWeb3();
     addVoltaNetwork();
+    
     sendClaim();
+   
 
    
 console.log('The page has fully loaded ^ㅂ^')
 });
+
+async function retrieveTransferEvents(){
+
+    //console.log(await voltaContract.getPastEvents('TransferSingle', { fromBlock: 0, toBlock: 'latest' }))
+
+ 
+    try {
+          let succesArr = await voltaContract.getPastEvents('TransferSingle', { fromBlock: 0, toBlock: 'latest' });
+         // console.log(succesArr);
+          fetchPersonalNFT(succesArr);
+          //return succesArr;
+    } catch(error){
+        console.log(error.message);}}
 //voltaContract = abi.at(contractAddress);           
 async function loadContract(){
     let abi = [
@@ -67,6 +85,19 @@ async function loadContract(){
                 }
             ],
             "name": "OwnershipTransferred",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": false,
+                    "internalType": "address",
+                    "name": "account",
+                    "type": "address"
+                }
+            ],
+            "name": "Paused",
             "type": "event"
         },
         {
@@ -163,6 +194,19 @@ async function loadContract(){
             "type": "event"
         },
         {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": false,
+                    "internalType": "address",
+                    "name": "account",
+                    "type": "address"
+                }
+            ],
+            "name": "Unpaused",
+            "type": "event"
+        },
+        {
             "inputs": [
                 {
                     "internalType": "bytes32[]",
@@ -244,6 +288,83 @@ async function loadContract(){
                     "type": "address"
                 },
                 {
+                    "internalType": "uint256",
+                    "name": "tokenId",
+                    "type": "uint256"
+                }
+            ],
+            "name": "burn",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "account",
+                    "type": "address"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "id",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "value",
+                    "type": "uint256"
+                }
+            ],
+            "name": "burn",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "account",
+                    "type": "address"
+                },
+                {
+                    "internalType": "uint256[]",
+                    "name": "ids",
+                    "type": "uint256[]"
+                },
+                {
+                    "internalType": "uint256[]",
+                    "name": "values",
+                    "type": "uint256[]"
+                }
+            ],
+            "name": "burnBatch",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "contractURI",
+            "outputs": [
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "account",
+                    "type": "address"
+                },
+                {
                     "internalType": "address",
                     "name": "operator",
                     "type": "address"
@@ -294,6 +415,26 @@ async function loadContract(){
                     "internalType": "address",
                     "name": "",
                     "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "pause",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "paused",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
                 }
             ],
             "stateMutability": "view",
@@ -423,10 +564,17 @@ async function loadContract(){
             "type": "function"
         },
         {
+            "inputs": [],
+            "name": "unpause",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
             "inputs": [
                 {
                     "internalType": "uint256",
-                    "name": "_tokenId",
+                    "name": "",
                     "type": "uint256"
                 }
             ],
@@ -467,13 +615,22 @@ async function loadContract(){
         }
     ];
     
-    
-//  voltaContract = abi.at(contractAddress);
-voltaContract = new web3.eth.Contract(abi, "0xb2eFC7E841A5E0e12f6CF29ACF9C74d20a5Ab191");
-console.log(voltaContract.methods);
   
+
+//  voltaContract = abi.at(contractAddress);
+voltaContract = new web3.eth.Contract(abi, "0x34090Cc1df6D79aA28a7b1a50fe365b55aE4Ce45");
+console.log(voltaContract.methods);
+  retrieveTransferEvents();
 }
 
+function display (arr){
+
+    for(let i = 0; i < arr.length ; i++){
+         console.log(arr[i].returnValues.id) ;
+    }
+  
+
+}
 async function loadWeb3() {
     if (ethereum) {
       web3 = new Web3(ethereum);
@@ -487,11 +644,11 @@ async function loadWeb3() {
     web3.eth.defaultAccount = accounts[0];
     console.log(`Your account is ${web3.eth.defaultAccount}`);
     document.getElementById("metamask-acc").innerHTML +=` ${web3.eth.defaultAccount}`;
-
+    
     loadContract();
-    retrieveTransferEvents();
+   
   }
-  
+
 function sendClaim(){
     document.getElementById("claimForm").addEventListener('submit',function(e){
         e.preventDefault();
@@ -928,6 +1085,7 @@ function sendClaim(){
             await ethereum.request({
                 method: 'wallet_switchEthereumChain',
                 params: [{ chainId: '0x12047' }], // 73799
+                
             });
         } catch (error) {
             if (error.code === 4902) {
@@ -1067,16 +1225,37 @@ function pushToChain(hash){
 
 //collection 
 
-async function retrieveTransferEvents(){
+function leftFillNum(num) {
+    let format = ".json";
+    let paddedNum = num.toString().padStart(64, 0);
+    let metadataJSON  = paddedNum.concat(format);
+    console.log(metadataJSON);
+    return metadataJSON;
 
-    console.log(await voltaContract.getPastEvents('TransferSingle', { fromBlock: 0, toBlock: 'latest' }))
+}
+
+function fetchPersonalNFT(arr){
+
+    arr.forEach(entries => {
+        if(entries.returnValues.to == web3.eth.defaultAccount){
+                let temp = (entries.returnValues.id);
+               // console.log(temp);
+               // leftFillNum(temp);
+                let data =  fetch(ipfsAddress + leftFillNum(temp))
+                .then(response => response.json())
+                .then(error => console.log(error));
+                console.log(data.url);
+        }
+        
+ 
+     //return entries.returnValues.id;
+        
+        
+    });
 
 
 }
 
 
-
-
-    
 
 
