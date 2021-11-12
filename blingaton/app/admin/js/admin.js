@@ -1,6 +1,8 @@
 let contract
 let contractAddress = "0x52f2B4A2986f897a2f3119A64a4f115713256181";
-let hashes = [];
+
+const greenicon = '<img src="https://icon-library.com/images/icon-checkbox/icon-checkbox-27.jpg" style="width:20px;height:20px;display:block;margin-left:auto;margin-right:auto;">'
+const redicon = '<img src="https://icon-library.com/images/failed-icon/failed-icon-7.jpg" style="width:20px;height:20px;display:block;margin-left:auto;margin-right:auto;">'
 
 window.addEventListener('load', async (event) => {
   console.log('The page has fully loaded ^ㅂ^')
@@ -95,7 +97,7 @@ async function displayVouchers(vouchers) {
     let slug = vouchers[i].slug;
     let hash = vouchers[i].hash;
     let voucher = await contract.methods.vouchers(hash).call();
-    document.getElementById("output").innerHTML += `<tr><td>${slug}</td><td>${hash}</td><td>${voucher.exists}</td><td>${voucher.claimed}</td></tr>`;
+    document.getElementById("output").innerHTML += `<tr><td>${slug}</td><td>${hash}</td><td>${voucher.exists ? greenicon : redicon}</td><td>${voucher.claimed ? greenicon : redicon}</td></tr>`;
   }
 }
 
