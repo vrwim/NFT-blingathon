@@ -8,7 +8,8 @@ window.addEventListener('load', async (event) => {
     await loadWeb3();
     addVoltaNetwork();
     setupFormEvents();
-    removeElement();
+
+    document.getElementById("walletModal").href = `https://explorer.energyweb.org/address/${web3.eth.defaultAccount}`;
 
     console.log('The page has fully loaded ^ㅂ^')
 });
