@@ -1,11 +1,11 @@
 'use strict'
 
-let contract
-let contractAddress = "0x34090Cc1df6D79aA28a7b1a50fe365b55aE4Ce45";
-let ipfsAddress = 'https://gateway.pinata.cloud/ipfs/QmTChVvgzubRiwFA5W75Z3crzmnBJGHgNp8txfZazyrKKS/'
+let contract;
+let contractAddress = "0x40815469A720EA38c495859fB3d3f3C2dF0b43A3";
+let ipfsAddress;
 
-window.addEventListener('load', (event) => {
-    loadWeb3();
+window.addEventListener('load', async (event) => {
+    await loadWeb3();
     addVoltaNetwork();
     setupFormEvents();
     removeElement();
@@ -20,7 +20,7 @@ async function retrieveTransferEvents() {
         succesArr.forEach(entries => {
             if(entries.returnValues.to == web3.eth.defaultAccount){
                 let tempId = (entries.returnValues.id);
-                let ipfsLink = ipfsAddress + leftFillNum(tempId)
+                let ipfsLink = ipfsAddress.replace("{id}.json", leftFillNum(tempId))
 
                 fetch(ipfsLink)
                 .then((res) => res.json ())
@@ -500,6 +500,9 @@ async function loadContract() {
 
     contract = new web3.eth.Contract(abi, contractAddress);
     console.log(contract.methods);
+
+    ipfsAddress = (await contract.methods.contractURI().call()).replace("gateway.pinata.cloud", "ipfs.io");
+
     retrieveTransferEvents();
 }
 
@@ -526,7 +529,7 @@ async function loadWeb3() {
     document.getElementById("metamask-acc").innerHTML += `${acc}`;
    
 
-    loadContract();
+    await loadContract();
 }
 
 function setupFormEvents() {
