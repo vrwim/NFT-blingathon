@@ -1,5 +1,5 @@
 let contract;
-let contractAddress = "0x40815469A720EA38c495859fB3d3f3C2dF0b43A3";
+let contractAddress = "0xc0eE5F176eC4FbFD13cDD746fC62aA91e62F13e1";
 let ipfsAddress;
 
 window.addEventListener('load', async (event) => {
@@ -490,7 +490,7 @@ function leftFillNum(num) {
 async function loadCollection() {
     document.getElementById("collection-container").innerHTML = "";
     for (let i = 1; i < 79; i++) {
-        let ipfsLink = ipfsAddress.replace("{id}.json", leftFillNum(i))
+        let ipfsLink = ipfsAddress + "/" + leftFillNum(i);
 
         try {
             let response = await fetch(ipfsLink);

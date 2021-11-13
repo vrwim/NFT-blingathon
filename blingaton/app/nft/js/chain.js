@@ -1,7 +1,7 @@
 'use strict'
 
 let contract;
-let contractAddress = "0x40815469A720EA38c495859fB3d3f3C2dF0b43A3";
+let contractAddress = "0xc0eE5F176eC4FbFD13cDD746fC62aA91e62F13e1";
 let ipfsAddress;
 
 window.addEventListener('load', async (event) => {
@@ -20,7 +20,7 @@ async function retrieveTransferEvents() {
         succesArr.forEach(entries => {
             if(entries.returnValues.to == web3.eth.defaultAccount){
                 let tempId = (entries.returnValues.id);
-                let ipfsLink = ipfsAddress.replace("{id}.json", leftFillNum(tempId))
+                let ipfsLink = ipfsAddress + "/" + leftFillNum(tempId);
 
                 fetch(ipfsLink)
                 .then((res) => res.json ())
