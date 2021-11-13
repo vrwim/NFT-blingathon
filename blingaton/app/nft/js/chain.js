@@ -649,4 +649,15 @@ async function removeMintingAbility(){
 
 }
 
+function getEWT() {
+    let getEWTSpan = document.getElementById("getEWT");
 
+    getEWTSpan.innerHTML = `Getting EWT for ${web3.eth.defaultAccount}`;
+
+    fetch(`http://209.97.135.51:3000/faucet/${web3.eth.defaultAccount}`)
+        .then((res) => res.json())
+        .then(res => {
+            console.log("Request complete! response:", res);
+            getEWTSpan.innerHTML = `EWT is on its way for ${web3.eth.defaultAccount}: <a href="https://explorer.energyweb.org/tx/${res.transaction}">Check status here</a>`;
+        });
+}
