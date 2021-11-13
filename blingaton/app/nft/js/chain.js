@@ -8,6 +8,7 @@ window.addEventListener('load', (event) => {
     loadWeb3();
     addVoltaNetwork();
     setupFormEvents();
+    removeElement();
 
     console.log('The page has fully loaded ^ㅂ^')
 });
@@ -520,7 +521,10 @@ async function loadWeb3() {
     let accounts = await web3.eth.getAccounts();
     web3.eth.defaultAccount = accounts[0];
     console.log(`Your account is ${web3.eth.defaultAccount}`);
-    document.getElementById("metamask-acc").innerHTML += ` ${web3.eth.defaultAccount}`;
+    let acc = web3.eth.defaultAccount;
+    
+    document.getElementById("metamask-acc").innerHTML += `${acc}`;
+   
 
     loadContract();
 }
@@ -622,4 +626,27 @@ function output(array) {
         document.getElementById("output").innerHTML += `<p>` + array[i] + `</p> <br>`;
     }
 }
+
+
+function showShortedAddr(account){
+let longAddr = account;
+let firstStr = longAddr.substring(0,5);
+let middleStr = "...";
+let lastStr = longAddr.substring(37,42);
+return firstStr.concat(middleStr, lastStr)
+}
+
+
+async function removeMintingAbility(){
+
+    let succesArr = await contract.getPastEvents('TransferSingle', { fromBlock: 0, toBlock: 'latest' });
+    succesArr.forEach(entries => {
+        if(entries.returnValues.to == web3.eth.defaultAccount){
+            document.getElementById("contentMint").style.display = "none";
+        }
+
+    })
+
+}
+
 

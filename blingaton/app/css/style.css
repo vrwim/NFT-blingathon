@@ -1,32 +1,29 @@
-
-
 .content{
-   
     align-items: center;
-   
     margin: auto;
-    width: 50%;
     
     font-size: 1.2em;
-    padding: 0 1em 2em;
-    line-height: 1.4;
+    margin-top:50px;
+   
 }
 
 .content div{
     width: 50vw;
     margin: auto;
-   
 
 }
 
 #metamask-acc {
     font-size: 14px;
+    float: right;
 }
 
 #mint {
     margin-top: 20px;
     
 }
+
+
 
   
 
@@ -53,8 +50,11 @@
     max-width: 25vw;
     border: 1px solid black;
     box-shadow: 10px 5px 5px lightgray;
-    font-size:small;
+    font-size:small; 
+    border-radius: 25px;
   }
+
+
   
   
   
@@ -63,7 +63,14 @@
   height: auto;
   display: block;
   margin: auto;
+  border-radius: 25px;
   
+  
+  }
+
+  .flex-item-db h2{
+    font-size: 1.3vw;
+    margin-top: 10px;
   }
   .flex-item-db li {
   margin-top:1vh;
@@ -72,9 +79,44 @@
   margin-right: auto;
   display:block;}
 
-  a {
-    background-color: black;
+  
+  #walletModal {
+    margin-top: 20px;
   }
+
+  .nes-badge.is-icon span.is-dark:first-child{
+    width: auto;
+  }
+
+  .nes-badge.is-icon span.is-warning:last-child{
+    width: auto;
+  }
+
+
+.navbar{
+    
+    
+    top: 0px;
+    left: 0px;
+    width: 95vw;
+    max-width: 100vw;
+    height: 50px;
+    margin: 0px;
+    background-color: rgba(255, 255, 255, 0);
+    transition: background-color 1s;
+    z-index: 20;
+    
+}
+
+.navbar > img {
+  height: 34px;
+  width: calc(40px * 3.75);
+  margin: 8px 40px;
+}
+
+.claimForm{
+  display: none;
+}
 
   
     
