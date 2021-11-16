@@ -6,7 +6,6 @@ let ipfsAddress;
 
 window.addEventListener('load', async (event) => {
     await loadWeb3();
-    addVoltaNetwork();
     setupFormEvents();
 
     document.getElementById("walletModal").href = `https://explorer.energyweb.org/address/${web3.eth.defaultAccount}`;
@@ -529,6 +528,7 @@ async function loadWeb3() {
     
     document.getElementById("metamask-acc").innerHTML += `${acc}`;
    
+    await addEnergyWebNetwork();
 
     await loadContract();
 }
@@ -585,6 +585,10 @@ async function addEnergyWebNetwork() {
 
                     }],
                 });
+		await ethereum.request({
+            		method: 'wallet_switchEthereumChain',
+            		params: [{ chainId: '0xf6' }],
+        	});
             } catch (addError) {
                 console.log('Did not add network');
             }
@@ -662,6 +666,6 @@ function getEWT() {
         .then((res) => res.json())
         .then(res => {
             console.log("Request complete! response:", res);
-            getEWTSpan.innerHTML = `EWT is on its way for ${web3.eth.defaultAccount}: <a href="https://explorer.energyweb.org/tx/${res.transaction}">Check status here</a>`;
+            getEWTSpan.innerHTML = `EWT is on its way for ${web3.eth.defaultAccount}: <a href="https://explorer.energyweb.org/tx/${res.transaction}" target="_blank">Check status here</a>`;
         });
 }
