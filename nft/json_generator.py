@@ -29,6 +29,8 @@ def readfilename():
         for file in files:
 
             file_name = str(os.path.basename(file))
+            
+            generatejson(file_name, file_name[0])
 
 
 
